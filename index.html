@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>MIT 2301 SE Quiz</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1f1b13;--mu:#6b6558;--ac:#2d1f00;--ok:#1d7a46;--bad:#b3261e;--bd:#ddd8cb;--gold:#f6b323;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17140e;--card:#221e15;--tx:#f1ede2;--mu:#a49d8b;--ac:#f6b323;--ok:#5fcf8f;--bad:#ff8a80;--bd:#3a3427}}
+:root[data-theme="dark"]{--bg:#17140e;--card:#221e15;--tx:#f1ede2;--mu:#a49d8b;--ac:#f6b323;--ok:#5fcf8f;--bad:#ff8a80;--bd:#3a3427}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:8px 0}h2{font-size:18px;margin:16px 0 8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin:12px 0}
+button,input{font:inherit}
+button{background:var(--ac);color:var(--bg);border:0;border-radius:8px;padding:10px 16px;cursor:pointer}
+button.sec{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+button:disabled{opacity:.4}
+input[type=text]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--bd);border-radius:20px;padding:6px 12px;cursor:pointer;user-select:none}
+.chip.on{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--bd);border-radius:10px;padding:10px;margin:8px 0;cursor:pointer}
+.opt.sel{border-color:var(--gold);background:rgba(246,179,35,.15)}
+.opt.ok{border-color:var(--ok);background:rgba(29,122,70,.14)}.opt.no{border-color:var(--bad);background:rgba(179,38,30,.12)}
+.mu{color:var(--mu);font-size:14px}.nav{display:flex;flex-wrap:wrap;gap:6px}
+.nav b{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--bd);border-radius:6px;cursor:pointer;font-weight:500;font-size:14px}
+.nav b.done{background:var(--gold);color:#2d1f00}.nav b.cur{outline:2px solid var(--ac)}
+.big{font-size:40px;font-weight:700}.tag{font-size:12px;border-radius:4px;padding:1px 6px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:6px;border-bottom:1px solid var(--bd);text-align:left}
+.sc{overflow-x:auto}
+</style></head><body><main id="app"></main>
+<script>
+const TOP=["Lecture 1 – Intro to SE","Lecture 2 – Case studies & ethics","Lecture 3 – Evolution, prototyping, process improvement","Lecture 4 – Agile, XP & Scrum","Lecture 5 – Requirements engineering"];
+const T=[[
+["Which are examples of system software?",["Device drivers","Antivirus utility","MATLAB","Google Chrome"],"AB"],
+["Which are examples of application software?",["Microsoft Excel","Linux","VLC Media Player","Printer driver"],"AC"],
+["Which are embedded software examples?",["Washing machine controller","Anti-lock braking firmware","SAP ERP","Wireshark"],"AB"],
+["Which are real-time software examples?",["Air traffic control","Medical monitoring","Spreadsheet","Photo editor"],"AB"],
+["Which are database management software?",["MySQL","MongoDB","Git","Wireshark"],"AB"],
+["Which are network software examples?",["FTP tools","VPN software","TensorFlow","Salesforce"],"AB"],
+["Which are development software?",["Eclipse IDE","Git","Zoho CRM","FIFA"],"AB"],
+["Which are AI software examples?",["ChatGPT","TensorFlow","Oracle ERP","AutoCAD"],"AB"],
+["Which are enterprise software examples?",["SAP","Salesforce","PyCharm","MATLAB"],"AB"],
+["Which are scientific/engineering software?",["MATLAB","ANSYS","Instagram","Minecraft"],"AB"],
+["Software is more than programs. Which are part of it?",["Documentation","Configuration data","Only source code","Support websites"],"ABD"],
+["How do software projects differ from other engineering projects?",["Customers struggle to specify requirements fully","Software is largely intangible","Replication of software is costly","Requirements change regularly"],"ABD"],
+["Which statements about software cost are correct?",["Maintenance may cost several times development","PC software cost often exceeds hardware cost","Hardware always dominates cost","SE aims at cost-effective development"],"ABD"],
+["Which are causes of software project failure?",["Increasing system complexity","Failure to use SE methods","Excessive testing","Too much hardware"],"AB"],
+["Which are essential attributes of good software?",["Maintainability","Dependability and security","Colourfulness","Efficiency","Acceptability"],"ABDE"],
+["Dependability includes which characteristics?",["Reliability","Security","Safety","Portability"],"ABC"],
+["Which are fundamental software process activities?",["Specification","Development","Validation","Evolution","Marketing"],"ABCD"],
+["Which are generic software products?",["PC graphics programs","CAD software","Air traffic control software","Embedded control systems"],"AB"],
+["Which are customized products?",["Air traffic control software","Embedded control systems","PC graphics programs","Traffic monitoring systems"],"ABD"],
+["Which are general issues affecting software?",["Heterogeneity","Business and social change","Security and trust","Scale","Brand colour"],"ABCD"],
+["Which are listed application types?",["Stand-alone applications","Batch processing systems","Embedded control systems","Quantum rendering systems"],"ABC"],
+["Which comparisons of SE, CS and systems engineering are correct?",["CS focuses on theory and fundamentals","SE deals with practicalities of delivering useful software","Systems engineering covers only software","SE is part of the broader systems engineering process"],"ABD"],
+["Which are key challenges facing SE?",["Increasing diversity","Reduced delivery times","Developing trustworthy software","Eliminating all documentation"],"ABC"],
+["Which describe process activities correctly?",["Specification defines software and its constraints","Validation checks software is what the customer requires","Evolution modifies software for changing needs","Development means only testing"],"ABC"],
+["Which describe professional software?",["Used by external users, not just developers","Maintained and changed throughout its life","Equivalent to individual programming","Needs specification, design and evolution support"],"ABD"],
+["Which are correct about system vs application software?",["System software manages system operations","Application software needs system software to run","Application software works at hardware level","System software performs user-specific tasks"],"AB"],
+["Which facts about the Ariane 5 failure are correct?",["It happened in 1996","A data conversion bug was involved","The rocket was worth $370 million","Engine overheating caused it"],"ABC"],
+["Why is software hard to test and change safely?",["Exhaustive testing of all inputs is impractical","A small change can alter overall behaviour","Trivial replication makes software grow complex","Software is a tangible product"],"ABC"],
+["Which are mobile software examples?",["Instagram","Google Maps","Uber","Wireshark"],"ABC"],
+["Which are gaming software examples?",["Minecraft","FIFA","The Legend of Zelda","MATLAB"],"ABC"],
+["Which examples showed customer–developer misunderstandings?",["Bank wanting more than a basic login","School 'simple attendance system'","Hospital patient management growth","Airline seat selection app"],"ABC"],
+["Which were requirement changes in the food delivery app example?",["Live chat with drivers","Digital wallets","Discount codes","Satellite navigation"],"ABC"],
+["Which are system software items?",["Disk cleanup tools","Antivirus software","Device drivers","Adobe Photoshop"],"ABC"],
+["Which statements about scale are correct?",["Software ranges from tiny embedded to Internet-scale cloud","Software is developed in diverse contexts","Pacemaker software must be ultra-reliable","Civil engineering is broader than SE"],"ABC"],
+["Which statements about SE costs are correct?",["About 60% are development costs","About 40% are testing costs","For custom software, evolution often exceeds development","The web had no effect on SE"],"ABC"],
+["Why is SE important?",["Cheaper in the long run than ad hoc programming","Most costs arise from changing software after use","Society relies on advanced software systems","Personal programming methods suffice everywhere"],"ABC"],
+["Which best defines software engineering?",["Only writing programs","An engineering discipline concerned with all aspects of software production","Only hardware design","Only testing"],"B"],
+["What share of software costs are development costs (lecture FAQ)?",["20%","40%","60%","80%"],"C"],
+["Which software type runs on dedicated hardware to perform specific functions?",["Network software","Gaming software","Enterprise software","Embedded software"],"D"],
+["Which attribute means software can evolve to meet changing customer needs?",["Efficiency","Acceptability","Maintainability","Portability"],"C"]
+],[
+["Which are case studies in the lecture?",["Insulin pump","Mentcare","Wilderness weather station","iLearn","Online banking system"],"ABCD"],
+["Which are ethical dilemmas mentioned?",["Disagreeing with senior management policy","Employer releasing a safety-critical system untested","Working on military or nuclear systems","Choosing a font"],"ABC"],
+["What does the insulin pump do?",["Reads a blood sugar sensor","Calculates insulin from rate of change of blood sugar","Signals a micro-pump to deliver a dose","Streams video to the doctor"],"ABC"],
+["Why is the insulin pump safety-critical?",["Low blood sugar can lead to coma and death","High blood sugar causes long-term eye and kidney damage","It displays advertising","It lowers screen brightness"],"AB"],
+["Which are essential insulin pump requirements?",["Available to deliver insulin when required","Reliable and delivers the correct amount","Must have a touchscreen","Must connect to social media"],"AB"],
+["Which are true of Mentcare?",["Maintains records for people with mental health problems","Clinics may run in practices or community centres","Can run on a PC at sites without secure network","Most patients need dedicated hospital treatment"],"ABC"],
+["Which are Mentcare goals?",["Management information to assess performance against targets","Timely information to support patient treatment","Maximise drug sales","Replace clinicians"],"AB"],
+["Which are Mentcare key features?",["Individual care management","Patient monitoring","Administrative reporting","Online shopping"],"ABC"],
+["Which are Mentcare concerns?",["Privacy","Safety","Availability","Entertainment value"],"ABC"],
+["Who may access Mentcare patient information?",["Authorised medical staff","The patient themselves","Any health authority employee","Advertisers"],"AB"],
+["Which instruments does the weather station use?",["Temperature","Wind speed and direction","Rainfall","Soil pH"],"ABC"],
+["Which are parts of the weather information system?",["Weather station system","Data management and archiving system","Station maintenance system","Patient records system"],"ABC"],
+["What does the station maintenance system do?",["Communicates by satellite with stations","Monitors station health","Reports problems","Archives all weather data"],"ABC"],
+["Which are extra weather station software functions?",["Report hardware faults","Manage power, shutting generators in high wind","Support dynamic reconfiguration","Predict weather with machine learning"],"ABC"],
+["Which are true of iLearn?",["Framework for general and specially designed learning tools","Tools chosen by teachers and learners","Service-oriented system","Used only in universities"],"ABC"],
+["Benefits of iLearn being service-oriented:",["Incremental updates as services appear","Quick configuration for different user groups","Components are replaceable services","Requires one monolithic codebase"],"ABC"],
+["Which are iLearn service types?",["Utility services","Application services","Configuration services","Hardware services"],"ABC"],
+["Which statements on iLearn integration are correct?",["Integrated services offer an API","Independent services run via a browser","Independent services share data via copy and paste","Integrated services only share via copy and paste"],"ABC"],
+["Which are iLearn application services?",["Email","Conferencing","Photo sharing","Authentication utility"],"ABC"],
+["Software engineers have responsibilities to:",["The engineering profession","Society","Technical issues only","Competitors' source code"],"AB"],
+["What do professional societies' codes of conduct do?",["Set out expected standards of behaviour","Apply to their members","Define compiler syntax","Replace the law"],"AB"],
+["Key points of the lecture state that:",["SE fundamentals apply to all types of system","Different systems need appropriate tools and techniques","SE applies only to web apps","SE is irrelevant for embedded systems"],"AB"],
+["How does Mentcare handle connectivity?",["Uses a centralized database","Downloads local copies when disconnected","Uses the central database when securely networked","Never works offline"],"ABC"],
+["Mentcare safety concerns include:",["Patients who may be suicidal or dangerous","Warning staff where possible","Availability when needed","Selling patient data"],"ABC"],
+["Mentcare monthly reports may include:",["Patients treated per clinic","Patients entering/leaving care","Drugs prescribed and costs","Daily weather"],"ABC"],
+["The weather station system itself is responsible for:",["Collecting weather data","Initial data processing","Transmitting to data management","Archiving all stations' data"],"ABC"],
+["Which case study is a safety-critical embedded system?",["Mentcare","iLearn","Wilderness weather station","Insulin pump"],"D"],
+["Which case study is built as service-oriented?",["iLearn","Insulin pump","Mentcare","Weather station"],"A"],
+["Which system collects data in remote areas?",["iLearn","Mentcare","Wilderness weather station","Insulin pump"],"C"],
+["Which system maintains records of people receiving mental health care?",["Insulin pump","Mentcare","iLearn","Weather station"],"B"]
+],[
+["Which are test plans in the V-model?",["Acceptance test plan","System integration test plan","Sub-system integration test plan","Marketing plan"],"ABC"],
+["Which are V-model test stages?",["Sub-system integration test","System integration test","Acceptance test","Hardware burn-in test"],"ABC"],
+["Which statements about evolution are correct?",["Software is inherently flexible","Requirements change with business circumstances","Development/maintenance split is increasingly irrelevant","Fewer systems are completely new","Software cannot change after release"],"ABCD"],
+["Which are steps in the system evolution cycle?",["Assess existing systems","Propose system changes","Modify systems","Hire new testers"],"ABC"],
+["Why is change inevitable?",["Business changes","New technologies","Changing platforms","Users enjoy rework"],"ABC"],
+["The costs of change include:",["Rework such as re-analysing requirements","Implementing new functionality","Savings from prototypes","Free upgrades"],"AB"],
+["Which reduce the costs of rework?",["Change anticipation","Change tolerance","Change ignorance","Freezing requirements forever"],"AB"],
+["Which statements about prototyping and incremental development are correct?",["Prototyping supports change anticipation","Incremental development supports change tolerance","Prototyping supports only change tolerance","Incremental delivery supports neither"],"AB"],
+["Which approaches cope with changing requirements?",["System prototyping","Incremental delivery","Big-bang release","Requirements freeze"],"AB"],
+["A prototype can be used in:",["Requirements elicitation and validation","Design to explore options and UI","Back-to-back testing","Deployment as the production system"],"ABC"],
+["Benefits of prototyping:",["Improved usability","A closer match to real needs","Guaranteed bug-free software","Reduced development effort"],"ABD"],
+["Which are outputs of prototype development?",["Prototyping plan","Evaluation report","Executable prototype","Marketing brochure"],"ABC"],
+["Prototype development may:",["Use rapid prototyping tools","Leave out functionality","Omit error checking and recovery","Prioritise reliability and security"],"ABC"],
+["A prototype should focus on:",["Poorly understood areas","Functional rather than non-functional requirements","Reliability and security","Complete error recovery"],"AB"],
+["Why discard prototypes?",["Hard to tune for non-functional requirements","Usually undocumented","Structure degraded by rapid change","Always meets quality standards"],"ABC"],
+["Which describe incremental delivery?",["System delivered in increments","Highest priority requirements go in early increments","Requirements frozen once an increment starts","Later increments cannot evolve"],"ABC"],
+["Which statements on incremental development/delivery are correct?",["Development increments are evaluated by a customer proxy","Delivery gives more realistic evaluation","Delivery is easy for replacement systems","Development is the normal agile approach"],"ABD"],
+["Which are incremental delivery steps?",["Define outline requirements","Assign requirements to increments","Design system architecture","Retire old system"],"ABC"],
+["Advantages of incremental delivery:",["Value delivered with each increment","Early increments act as prototypes","Lower risk of project failure","Priority services get most testing","No integration needed"],"ABCD"],
+["Problems with incremental delivery:",["Hard to identify common facilities","Conflicts with procurement models needing full specification","Delivers value late","Needs no architecture"],"AB"],
+["Process improvement means:",["Understanding existing processes","Changing them to raise quality or cut cost/time","Ignoring existing processes","Only buying tools"],"AB"],
+["Which are approaches to improvement?",["Process maturity approach","Agile approach","Waterfall approach","Random approach"],"AB"],
+["Which statements compare agile and maturity improvement approaches?",["Agile focuses on iterative development","Maturity focuses on process and project management","Agile focuses on heavy documentation","Maturity ignores good practice"],"AB"],
+["Which are in the process improvement cycle?",["Measure","Analyze","Change","Deploy"],"ABC"],
+["About process measurement:",["Provides a baseline","Quantitative data where possible","Organizational objectives should drive improvement","Measurements should drive improvement"],"ABC"],
+["Process analysis involves:",["Assessing the current process","Identifying weaknesses and bottlenecks","Developing process maps","Replacing hardware"],"ABC"],
+["Process change involves:",["Proposing changes for weaknesses","Resuming the cycle to collect data","Ending the cycle forever","Not collecting data"],"AB"],
+["Which are process metrics?",["Time for activities","Resources such as person-days","Number of defects discovered","Colour of UI"],"ABC"],
+["Which are capability maturity levels?",["Defined","Quantitatively managed","Optimizing","Sustainable"],"ABC"],
+["Which SEI level descriptions are correct?",["Initial – essentially uncontrolled","Defined – process management procedures","Optimising – process improvement strategies","Managed – essentially uncontrolled"],"ABC"],
+["Which are general process models?",["Waterfall","Incremental development","Reuse-oriented development","Prototype-free model"],"ABC"],
+["Which key points are correct?",["Validation checks conformance to specification and real needs","Design turns a specification into an executable system","Evolution changes existing systems for new requirements","Evolution is optional"],"ABC"],
+["Which statements about coping with change are correct?",["Iterative processes allow change without disrupting the whole system","Prototyping and incremental delivery cope with change","Agile reduces process overhead","Maturity approaches only reduce overhead"],"ABC"],
+["Incremental delivery supports:",["Change avoidance","Change tolerance","Neither","Only prototyping"],"AB"],
+["About measuring a process:",["Hard if no defined standards exist","A process may need defining first","Organizational goals should drive improvement","You should measure nothing"],"ABC"],
+["Which V-model links are correct?",["Acceptance test plan – requirements specification","System integration test plan – system design","Sub-system integration test plan – detailed design","Acceptance test plan – detailed design"],"ABC"],
+["Which cycle order is shown for process improvement?",["Measure → Analyze → Change","Change → Measure → Analyze","Analyze → Measure → Change","Change → Analyze → Measure"],"A"],
+["An initial version of a system used to demonstrate concepts and try design options is a:",["Increment","Prototype","Baseline","Release candidate"],"B"],
+["What is CMM Level 3 called?",["Managed","Initial","Defined","Optimizing"],"C"],
+["Which approach delivers system parts to customers for comment and experimentation?",["Incremental delivery","Waterfall","Throw-away testing","Big-bang release"],"A"]
+],[
+["Which are characteristics of agile development?",["Specification, design and implementation interleaved","Frequent delivery of new versions","Comprehensive documentation before coding","Tool support such as automated testing"],"ABD"],
+["Why is rapid development important?",["Business requirements change fast","Stable requirements are impractical","Software must evolve with needs","Agile emerged in the 1960s"],"ABC"],
+["Which describe plan-driven development?",["Separate stages with planned outputs","Not necessarily waterfall","Iteration occurs within activities","Outputs negotiated during development"],"ABC"],
+["Agile methods:",["Focus on code over design","Are iterative","Deliver working software quickly","Add heavy design overhead"],"ABC"],
+["Which are valued more in the Agile Manifesto?",["Individuals and interactions","Working software","Customer collaboration","Following a plan"],"ABC"],
+["Which are agile principles?",["Customer involvement","Embrace change","Heavy documentation","Maintain simplicity"],"ABD"],
+["The customer's role in agile includes:",["Providing and prioritizing requirements","Evaluating iterations","Writing all the code","Signing off only at the end"],"AB"],
+["'People not process' means:",["Team skills are recognized and exploited","Teams develop their own ways of working","Prescriptive processes are imposed","Teams are interchangeable"],"AB"],
+["'Embrace change' means:",["Expect requirements to change","Design to accommodate change","Avoid all changes","Lock requirements early"],"AB"],
+["Where is agile applicable?",["Small/medium products for sale","Custom systems with committed customers and few regulations","Heavily regulated safety-critical systems","Virtually all modern products and apps"],"ABD"],
+["Which are true of Extreme Programming?",["Developed in the late 1990s","Builds may occur several times a day","Increments delivered every 2 weeks","Build accepted only if tests pass","Releases happen once a year"],"ABCD"],
+["Incremental planning in XP involves:",["Story cards","Stories chosen by time and priority","Breaking stories into tasks","Customer writing code"],"ABC"],
+["Test-first development means:",["An automated unit test framework is used","Tests are written before the functionality","Tests are written after release","Tests are optional"],"AB"],
+["Refactoring in XP is:",["Continuous","Done as soon as improvements are found","Keeps code simple and maintainable","Done only before release"],"ABC"],
+["Pair programming benefits:",["Spreads knowledge","Acts as an informal review","Develops common ownership","Always halves productivity"],"ABC"],
+["Collective ownership means:",["Pairs work on all areas","No islands of expertise","Anyone can change anything","Only the author may change code"],"ABC"],
+["Continuous integration means:",["Integrate as soon as a task is complete","All unit tests must pass after integration","Integrate only at project end","Skip tests for speed"],"AB"],
+["Sustainable pace means:",["Large overtime is unacceptable","Overtime hurts quality and productivity","Overtime is encouraged","Weekend work is required"],"AB"],
+["On-site customer means:",["A user representative available full time","The customer is part of the team","They bring requirements to the team","The customer visits quarterly"],"ABC"],
+["Which XP–agile principle mappings are correct?",["Incremental development – small frequent releases","Customer involvement – full-time engagement","People not process – pair programming and collective ownership","Simplicity – constant refactoring","Change – yearly releases"],"ABCD"],
+["Which XP practices are widely used in agile?",["User stories","Refactoring","Test-first development","Eight-hour pair rotation"],"ABC"],
+["Why isn't original XP widely used?",["Technical focus","Hard to integrate with management practice","Agile still uses XP practices","XP forbids testing"],"ABD"],
+["User stories are:",["Written on cards","Chosen by the customer for releases","Broken into implementation tasks","Basis for cost and schedule estimates","Written as legal contracts"],"ABCD"],
+["Which are examples of refactoring?",["Reorganising a class hierarchy to remove duplication","Renaming attributes and methods","Replacing inline code with library calls","Adding new features"],"ABC"],
+["Refactoring:",["Improves understandability","Reduces need for documentation","Makes architecture changes cheap","Makes changes easier"],"ABD"],
+["Which statements on design for change are correct?",["Conventional wisdom: anticipate change","XP: changes can't be reliably anticipated","XP: design for every anticipated change","XP: improve code constantly"],"ABD"],
+["Which are XP testing features?",["Test-first development","Incremental tests from scenarios","Automated harness runs all component tests per build","Manual-only testing"],"ABC"],
+["About test-driven development:",["Tests clarify requirements","Tests are written as programs","A framework like JUnit is usual","Only new tests are run"],"ABC"],
+["Customers in testing:",["Help develop acceptance tests","Validate new code is what is needed","Work full time on tests","May be reluctant due to limited time"],"ABD"],
+["Test automation means:",["Tests are executable components written before implementation","Tests are stand-alone","Tests simulate input and check output against specification","Tests are run manually"],"ABC"],
+["Problems with test-first development:",["Programmers take shortcuts writing tests","Some tests, like UI workflow, are hard to write","Test completeness is hard to judge","Test sets are always complete"],"ABC"],
+["About pair programming efficiency:",["Not necessarily inefficient","A pair may be more efficient than two separate developers","Reduces risk when members leave","Pairs are fixed forever"],"ABC"],
+["Agile project management:",["Aims to deliver on time and in budget","Standard approach is plan-driven","Needs an approach suited to incremental development","Needs no management"],"ABC"],
+["Which are Scrum phases?",["Outline planning","Sprint cycles","Project closure","Annual audit"],"ABC"],
+["Project closure in Scrum:",["Wraps up the project","Completes documentation like user manuals","Assesses lessons learned","Starts another sprint"],"ABC"],
+["The Scrum development team:",["Has no more than 7 people","Is self-organizing","Develops software and essential documents","Is managed by the ScrumMaster"],"ABC"],
+["The product backlog:",["Is a list of to-do items","Holds features, requirements and user stories","May include architecture or documentation tasks","Lists completed sprints"],"ABC"],
+["The product owner:",["Identifies features and requirements","Prioritizes them","Reviews the backlog continuously","Must always be a developer"],"ABC"],
+["The daily Scrum:",["Is a daily meeting","Reviews progress and prioritizes the day's work","Ideally includes the whole team face to face","Happens weekly"],"ABC"],
+["The ScrumMaster:",["Ensures the Scrum process is followed","Interfaces with the rest of the company","Is the project manager","Protects the team from distractions"],"ABD"],
+["About sprints:",["A development iteration","Usually 2–4 weeks","Always 6 months","Fixed length"],"ABD"],
+["Velocity:",["Estimates backlog effort a team covers per sprint","Helps estimate what a sprint can cover","Measures improving performance","Counts developers"],"ABC"],
+["A potentially shippable increment:",["Is delivered from a sprint","Is in a finished state","Needs no further work to integrate","Is always achievable in practice"],"ABC"],
+["The Scrum sprint cycle:",["Starts from the product backlog","Selection involves whole team and customer","Team is isolated from the customer during development","Work is reviewed with stakeholders at the end","Customer instructs developers daily"],"ABCD"],
+["The Scrum master in a sprint:",["Arranges daily meetings","Records decisions","Writes all the code","Communicates with customers and management"],"ABD"],
+["Scrum benefits:",["Manageable chunks","Unstable requirements don't hold up progress","Whole-team visibility","Customers see on-time delivery","Removes the need for a backlog"],"ABCD"],
+["Which method takes an 'extreme' approach to iterative development?",["Scrum","Extreme Programming","Waterfall","Spiral"],"B"],
+["What is the maximum recommended Scrum team size?",["5","7","10","12"],"B"],
+["How often are XP increments delivered to customers?",["Daily","Every 2 weeks","Every quarter","Yearly"],"B"],
+["Which Manifesto item is valued over contract negotiation?",["Working software","Customer collaboration","Individuals","Responding to change"],"B"]
+],[
+["Requirements engineering establishes:",["Services a customer requires","Constraints on operation and development","Source code","Hardware selection"],"AB"],
+["Why do requirements serve a dual function?",["Basis for a contract bid, open to interpretation","Basis for the contract, defined in detail","Both may be called requirements","Always the same detail"],"ABC"],
+["Davis' abstraction view says:",["Needs are abstract so a solution isn't pre-defined","Several contractors can bid","A detailed system definition follows award","Initial requirements pre-define the solution"],"ABC"],
+["User requirements are:",["Natural language plus diagrams","About services and operational constraints","Written for customers","A detailed contract specification"],"ABC"],
+["System requirements are:",["A structured document of detail","Define what should be implemented","May be part of a contract","Written for customers only"],"ABC"],
+["Which are stakeholder types?",["End users","System managers","External stakeholders","Random bystanders"],"ABC"],
+["Which are Mentcare stakeholders?",["Patients","Medical ethics manager","Medical records staff","Taxi drivers"],"ABC"],
+["Which Mentcare stakeholder roles are correct?",["Nurses coordinate consultations","Receptionists manage appointments","Doctors maintain the system","IT staff install and maintain the system"],"ABD"],
+["Agile and requirements:",["Uses incremental requirements engineering","Expresses requirements as user stories","Is practical for all critical systems","Is problematic when several teams are involved"],"ABD"],
+["Functional requirements:",["State services the system should provide","State reactions to inputs","May state what the system should not do","Are constraints on timing"],"ABC"],
+["Non-functional requirements:",["Constrain services such as timing","Constrain the development process","Often apply to the system as a whole","Describe individual services"],"ABC"],
+["Which are kinds of requirement?",["Functional","Non-functional","Domain","Cosmetic"],"ABC"],
+["Functional requirements depend on:",["Type of software","Expected users","Type of system","Logo colour"],"ABC"],
+["Which are Mentcare functional requirements?",["Search appointment lists for all clinics","Daily list of expected patients per clinic","Staff uniquely identified by 8-digit employee number","Available Mon–Fri 0830–17.30"],"ABC"],
+["On requirements imprecision:",["Ambiguity allows different interpretations","User meant searching all clinics","Developer meant searching one clinic","Both interpret identically"],"ABC"],
+["Complete and consistent requirements:",["Complete: all facilities described","Consistent: no contradictions","In practice impossible to achieve both fully","Always achievable"],"ABC"],
+["Which are non-functional requirements?",["Reliability","Response time","Mandated programming language or IDE","Button labels"],"ABC"],
+["About non-functional requirements:",["May be more critical than functional ones","If unmet the system may be useless","May affect overall architecture","Never affect architecture"],"ABC"],
+["Which are non-functional classifications?",["Product","Organisational","External","Cosmetic"],"ABC"],
+["Which classifications are correct?",["Execution speed – product","Legislative requirements – external","Process standards – external","Implementation requirements – organisational"],"ABD"],
+["Mentcare non-functional examples:",["Downtime ≤ 5 seconds/day – product","Health authority ID card login – organizational","Privacy standard compliance – external","ID card login – product"],"ABC"],
+["Goals vs verifiable requirements:",["A goal is a general intention like ease of use","Verifiable ones use objectively testable measures","Goals convey user intentions to developers","Goals are always testable"],"ABC"],
+["In the usability example:",["'Easy to use by medical staff' is a goal","'Four hours of training, ≤2 errors/hour' is testable","'Easy to use' is verifiable","Goals have no value"],"AB"],
+["Which property–metric pairs are correct?",["Speed – transactions/second","Size – Mbytes","Reliability – mean time to failure","Ease of use – number of ROM chips"],"ABC"],
+["Robustness metrics include:",["Time to restart after failure","% of events causing failure","Probability of data corruption on failure","Mbytes"],"ABC"],
+["Portability metrics include:",["% of target-dependent statements","Number of target systems","Response time","Screen refresh time"],"AB"],
+["Generic RE activities:",["Elicitation","Analysis","Validation","Compiling"],"ABC"],
+["About RE processes:",["Vary by domain, people and organisation","Are iterative with interleaved activities","Are always strictly sequential","Are identical everywhere"],"AB"],
+["Elicitation stages:",["Requirements discovery","Classification and organization","Prioritization and negotiation","Code review"],"ABC"],
+["Elicitation problems:",["Stakeholders don't know what they want","Stakeholders use their own terms","Stakeholders always agree","Conflicting requirements"],"ABD"],
+["Process activities:",["Discovery includes domain requirements","Classification groups requirements into clusters","Negotiation resolves conflicts","Specification precedes discovery"],"ABC"],
+["Interview types:",["Closed, pre-determined questions","Open, exploring issues","Normally a mix","Only closed interviews"],"ABC"],
+["Effective interviewing:",["Be open-minded","Listen to stakeholders","Prompt with springboard questions, proposals or prototypes","Dominate the discussion"],"ABC"],
+["Interviews in practice:",["Good for overall understanding of stakeholders' work","Suggest requirements rather than just asking","Interviewers must be open-minded","Best for domain requirements"],"ABC"],
+["Problems with interviews:",["Specialist language is hard to follow","Not good for domain requirements","Familiar knowledge is hard to articulate","Ideal for domain requirements"],"ABC"],
+["Process requirements may mandate:",["A particular IDE","A programming language","A development method","A screen colour"],"ABC"],
+["Which requirements are written for customers in natural language?",["System requirements","User requirements","Domain requirements","Process requirements"],"B"],
+["'Downtime shall not exceed five seconds a day' is what kind of requirement?",["Product","Organisational","External","Domain"],"A"],
+["Which requirement type is a constraint from the domain of operation?",["User","Domain","Functional","Process"],"B"],
+["A general intention of the user such as ease of use is a:",["Metric","Goal","Test case","Domain rule"],"B"]
+]];
+// ---- build 10 fixed sets of 20: 2 single-answer per set ----
+const W=[4,3,4,5,4],SG=[[0,2,5,7],[0,3,5,8],[1,3,6,8],[1,4,6,9],[2,4,7,9]];
+const S=T.map(a=>a.filter(q=>q[2].length==1)),M=T.map(a=>a.filter(q=>q[2].length>1)),ps=[0,0,0,0,0],pm=[0,0,0,0,0];
+const ALL=[];let id=0;
+for(let k=0;k<10;k++)for(let t=0;t<5;t++){let m=W[t];if(SG[t].includes(k)){ALL.push({id:id++,t,q:S[t][ps[t]++]});m--}for(let i=0;i<m;i++)ALL.push({id:id++,t,q:M[t][pm[t]++]})}
+// ---- state ----
+const $=s=>document.querySelector(s),app=$("#app"),L="A".charCodeAt(0);
+let mem={};const st={get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]||null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}};
+const load=()=>{try{return JSON.parse(st.get("se_quiz_results")||"[]")}catch(e){return[]}};
+let name="",topics=new Set([0,1,2,3,4]),cur=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pool=()=>ALL.filter(x=>topics.has(x.t));
+const sets=()=>{const p=pool(),r=[];for(let i=0;i<p.length;i+=20)r.push(p.slice(i,i+20));return r};
+function home(err){
+ const sv=load();
+ app.innerHTML=`<h1>MIT 2301 Software Engineering – Quiz</h1>
+ <div class="card"><h2>Your name</h2><input type="text" id="nm" placeholder="Enter your name (required)" value="${esc(name)}">${err?`<p style="color:var(--bad)">${err}</p>`:""}</div>
+ <div class="card"><h2>Topics</h2><div class="row">${TOP.map((x,i)=>`<span class="chip ${topics.has(i)?"on":""}" data-t="${i}">${x}</span>`).join("")}</div>
+ <div class="row" style="margin-top:10px"><button class="sec" id="all">Select all</button><button class="sec" id="none">Clear</button></div></div>
+ <div class="card"><h2>Quiz set</h2>${pool().length?`<div class="row">${sets().map((s,i)=>`<span class="chip" data-s="${i}">Set ${i+1} <span class="mu">(${s.length})</span></span>`).join("")}</div><p class="mu">Each set has up to 20 unique questions. Select all options that are correct – some questions have one answer, most have several. Wrong picks and missed correct answers cost points.</p>`:`<p class="mu">Select at least one topic.</p>`}</div>
+ <button class="sec" id="hist">Results history (${sv.length})</button>`;
+ document.querySelectorAll("[data-t]").forEach(e=>e.onclick=()=>{name=$("#nm").value;const i=+e.dataset.t;topics.has(i)?topics.delete(i):topics.add(i);home()});
+ $("#all").onclick=()=>{name=$("#nm").value;topics=new Set([0,1,2,3,4]);home()};$("#none").onclick=()=>{name=$("#nm").value;topics=new Set();home()};
+ document.querySelectorAll("[data-s]").forEach(e=>e.onclick=()=>{const n=$("#nm").value.trim();name=n;if(!n)return home("Please enter your name first.");start(+e.dataset.s)});
+ $("#hist").onclick=history;
+}
+function start(i){const key=name.toLowerCase(),att=load().filter(r=>r.key==key).length+1;
+ cur={set:i,qs:shuf(sets()[i]),ans:{},i:0,att,topics:[...topics]};show()}
+function show(){const x=cur.qs[cur.i],q=x.q,multi=q[2].length>1,a=cur.ans[x.id]||new Set();
+ app.innerHTML=`<div class="row" style="justify-content:space-between"><b>${esc(name)} · Attempt ${cur.att} · Set ${cur.set+1}</b><span class="mu">${Object.values(cur.ans).filter(s=>s.size).length}/${cur.qs.length} answered</span></div>
+ <div class="nav" style="margin:10px 0">${cur.qs.map((y,j)=>`<b class="${(cur.ans[y.id]||{size:0}).size?"done":""} ${j==cur.i?"cur":""}" data-j="${j}">${j+1}</b>`).join("")}</div>
+ <div class="card"><div class="mu">Question ${cur.i+1} of ${cur.qs.length} · <span class="tag">${TOP[x.t].split(" – ")[0]}</span> · ${multi?"Select all that apply":"Select one answer"}</div>
+ <h2>${esc(q[0])}</h2>${q[1].map((o,j)=>`<div class="opt ${a.has(j)?"sel":""}" data-o="${j}"><b>${String.fromCharCode(L+j)}.</b><span>${esc(o)}</span></div>`).join("")}</div>
+ <div class="row"><button class="sec" id="pv" ${cur.i?"":"disabled"}>Previous</button><button class="sec" id="nx" ${cur.i<cur.qs.length-1?"":"disabled"}>Next</button><span style="flex:1"></span><button id="sub">Submit quiz</button></div>`;
+ document.querySelectorAll("[data-j]").forEach(e=>e.onclick=()=>{cur.i=+e.dataset.j;show()});
+ document.querySelectorAll("[data-o]").forEach(e=>e.onclick=()=>{const j=+e.dataset.o;let s=cur.ans[x.id]||new Set();if(!multi)s=new Set();s.has(j)?s.delete(j):s.add(j);cur.ans[x.id]=s;show()});
+ $("#pv").onclick=()=>{cur.i--;show()};$("#nx").onclick=()=>{cur.i++;show()};
+ $("#sub").onclick=()=>{const un=cur.qs.filter(y=>!(cur.ans[y.id]||{size:0}).size).length;if(confirm(un?`${un} question(s) unanswered and will lose points. Submit anyway?`:"Submit your answers?"))finish()}}
+function score(q,s){const C=new Set([...q[2]].map(c=>c.charCodeAt(0)-L)),sel=s||new Set();let h=0,w=0;sel.forEach(j=>C.has(j)?h++:w++);const m=C.size-h;return{C,sel,h,w,m,pts:Math.max(-1,(h-w-m)/C.size)}}
+function finish(){const res=cur.qs.map(x=>({x,...score(x.q,cur.ans[x.id])}));const tot=res.reduce((a,r)=>a+r.pts,0),n=res.length,pct=Math.max(0,tot/n*100);
+ const rec={key:name.toLowerCase(),name,att:cur.att,set:cur.set+1,topics:cur.topics,date:new Date().toLocaleString(),pts:+tot.toFixed(2),n,pct:+pct.toFixed(1),full:res.filter(r=>r.pts==1).length};
+ const all=load();all.push(rec);st.set("se_quiz_results",JSON.stringify(all));
+ app.innerHTML=`<h1>Results – ${esc(name)} (Attempt ${cur.att}, Set ${cur.set+1})</h1><div class="card"><div class="big">${rec.pts} / ${n}</div><div>${rec.pct}% · ${rec.full} fully correct of ${n}</div><p class="mu">Per question: +1/k for each correct pick, −1/k for each wrong pick and for each missed correct answer (k = number of correct answers), minimum −1. Unanswered questions count as missed.</p></div>
+ ${res.map((r,i)=>`<div class="card"><div class="mu">Q${i+1} · <b style="color:${r.pts>=1?"var(--ok)":r.pts>0?"inherit":"var(--bad)"}">${+r.pts.toFixed(2)} pts</b>${r.sel.size?"":" · unanswered"}</div><b>${esc(r.x.q[0])}</b>${r.x.q[1].map((o,j)=>`<div class="opt ${r.C.has(j)?"ok":r.sel.has(j)?"no":""}"><b>${String.fromCharCode(L+j)}.</b><span>${esc(o)}${r.C.has(j)?" ✓ correct":""}${r.sel.has(j)?(r.C.has(j)?" (you picked)":" ✗ you picked"):""}</span></div>`).join("")}</div>`).join("")}
+ <div class="row"><button id="hm">Back to start</button><button class="sec" id="hs">History</button></div>`;
+ $("#hm").onclick=()=>home();$("#hs").onclick=history;window.scrollTo(0,0)}
+function history(){const sv=load().slice().reverse();
+ app.innerHTML=`<h1>Results history</h1><div class="card sc">${sv.length?`<table><tr><th>Name</th><th>Att.</th><th>Set</th><th>Score</th><th>%</th><th>Date</th></tr>${sv.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.att}</td><td>${r.set}</td><td>${r.pts}/${r.n}</td><td>${r.pct}</td><td>${esc(r.date)}</td></tr>`).join("")}</table>`:"<p class='mu'>No attempts yet.</p>"}</div>
+ <div class="row"><button id="hm">Back</button>${sv.length?'<button class="sec" id="cl">Clear history</button>':""}</div><p class="mu">History is stored in this browser only.</p>`;
+ $("#hm").onclick=()=>home();const c=$("#cl");if(c)c.onclick=()=>{if(confirm("Delete all stored results?")){st.set("se_quiz_results","[]");history()}}}
+home();
+</script></body></html>
